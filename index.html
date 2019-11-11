@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Exemplo Aplicação Plataforma SmartCampus</title>
+	<style>
+		table {
+		  font-family: arial, sans-serif;
+		  border-collapse: collapse;
+		  width: 100%;
+		}
+		
+		td, th {
+		  border: 1px solid #dddddd;
+		  text-align: left;
+		  padding: 8px;
+		}
+		
+		tr:nth-child(even) {
+		  background-color: #dddddd;
+		}
+		</style>
+</head>
+
+<body>
+	<h2>Demonstração Página HTML para Plataforma Inatel SmartCampus</h2>
+	<br><br>
+	<iframe name="hiddenFrame" width="0" height="0" border="0" style="display: none;"></iframe>
+
+	<form action="https://smartcampus.inatel.br:4433/api/userapps/5d1ce33592f4e8001a91c54a/devices/5d431bb653b2d6003023e8bd/meas" id="myForm1" method="post" name="myForm1" target="hiddenFrame" enctype='application/json'>
+
+	  <input type="hidden" id="x-master-token" name="x-master-token" value="trLIkl2dSyLGPXM8r7FQSNsu">
+	  <input type="hidden" id="temp" name="temp" value=10>
+	  <button type="submit" class="btn btn-success" style="margin-left:auto;margin-right:auto;" onclick="getLocation()">ENVIAR somente Temperatura "10"</button>
+
+	</form>
+	<br>
+
+	<form action="https://smartcampus.inatel.br:4433/api/userapps/5d1ce33592f4e8001a91c54a/devices/5d431bb653b2d6003023e8bd/meas" id="myForm2" method="post" name="myForm2" target="hiddenFrame" enctype='application/json'>
+
+	  <input type="hidden" id="x-master-token" name="x-master-token" value="trLIkl2dSyLGPXM8r7FQSNsu">
+	  <input type="hidden" id="temp" name="temp" value=20>
+	  <input type="hidden" id="latitude" name="latitude">
+      <input type="hidden" id="longitude" name="longitude">
+	  <button type="submit" class="btn btn-success" style="margin-left:auto;margin-right:auto;" onclick="getLocation()">ENVIAR Temperatura "20" e Localização</button>
+	  
+	</form>
+	<br>
+
+	<form action="https://smartcampus.inatel.br:4433/api/userapps/5d1ce33592f4e8001a91c54a/devices/5d431bb653b2d6003023e8bd/meas" id="myForm3" method="post" name="myForm3" target="hiddenFrame" enctype='application/json'>
+
+	  <input type="hidden" id="x-master-token" name="x-master-token" value="trLIkl2dSyLGPXM8r7FQSNsu">
+	  <input type="number" id="temp" name="temp">
+	  <button type="submit" class="btn btn-success" style="margin-left:auto;margin-right:auto;" onclick="getLocation()" >ENVIAR VALOR "X"</button>
+	  
+	</form>
+	<br>
+
+
+<button onclick="getMedidas()">Atualizar Tabela</button>
+<p id="tabela_medidas"></p>
+
+<br>
+
+<iframe name="GET_Frame"  ></iframe>
+	
+<form action="https://smartcampus.inatel.br:4433/api/userapps/5d1ce33592f4e8001a91c54a/devices/5d431bb653b2d6003023e8bd/meas" id="myForm5" method="get" name="myForm5" target="GET_Frame">
+  <input type="hidden" id="x-master-token" name="x-master-token" value="trLIkl2dSyLGPXM8r7FQSNsu">
+  <button type="submit"  class="btn btn-danger" style="background-color:red;margin-left:auto;margin-right:auto;" >VER DADOS</button>
+</form>
+<br>
+
+<script>
+function getMedidas() {
+	var obj, dbParam, xmlhttp, myObj, x, txt = "";
+	obj = { table: "medidas" };
+	dbParam = JSON.stringify(obj);
+	xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange = function() {
+	if (this.readyState == 4 && this.status == 200) {
+		myObj = JSON.parse(this.responseText);
+		txt += "<table border='1'>"
+		txt += "<tr><th>temp</th><th>Latitude</th><th>Longitude</th><th>Date</th></tr>"
+		for (x in myObj) {
+			txt += "<tr>";
+			if(myObj[x].temp){
+				txt += "<td>" + myObj[x].temp + "</td>";
+			}
+			else{
+				txt += "<td>" + " - " + "</td>";
+			}
+			if(myObj[x].latitude){
+				txt += "<td>" + myObj[x].latitude + "</td>";
+			}
+			else{
+				txt += "<td>" + " - " + "</td>";
+			}
+			if(myObj[x].longitude){
+				txt += "<td>" + myObj[x].longitude + "</td>";
+			}
+			else{
+				txt += "<td>" + " - " + "</td>";
+			}
+			if(myObj[x].updated){
+				txt += "<td>" + myObj[x].updated + "</td>";
+			}
+			else{
+				txt += "<td>" + " - " + "</td>";
+			}
+			txt += "</tr>";
+		}
+		txt += "</table>"    
+		document.getElementById("tabela_medidas").innerHTML = txt;
+	}
+	};
+	xmlhttp.open("GET", "https://smartcampus.inatel.br:4433/api/userapps/5d1ce33592f4e8001a91c54a/devices/5d431bb653b2d6003023e8bd/meas?x-master-token=trLIkl2dSyLGPXM8r7FQSNsu", true);
+	xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	xmlhttp.send("x=" + dbParam);
+}
+getMedidas();
+</script>
+
+<script>
+var lat = document.getElementById("latitude");
+var long = document.getElementById("longitude");
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+	console.log("2")
+  } else { 
+    lat.value = "0";
+    long.value = "0";
+  }
+}
+function showPosition(position) {
+  lat.value = position.coords.latitude;
+  long.value = position.coords.longitude;
+  
+}
+getLocation();
+</script>
+
+</body>
+
+</html>
