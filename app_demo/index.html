@@ -7,70 +7,85 @@
 		table {
 		  font-family: arial, sans-serif;
 		  border-collapse: collapse;
-		  width: 100%;
+		  margin-left: 3em;
+		  width: 80%;
 		}
 		
 		td, th {
 		  border: 1px solid #dddddd;
 		  text-align: left;
 		  padding: 8px;
+		  margin-left: 3em;
 		}
 		
 		tr:nth-child(even) {
 		  background-color: #dddddd;
+		  margin-left: 3em;
+		}
+		h3 {
+			margin-left: 3em;
+			margin-right: 0;
+			
 		}
 		</style>
 </head>
 
 <body>
-	<h2>Demonstração Página HTML para Plataforma Inatel SmartCampus</h2>
+	<h1 align="center">Inatel Smart Campus</h1>
 	<br><br>
+	<h3 margin-left="30">Lâmpada</h3>
 	<iframe name="hiddenFrame" width="0" height="0" border="0" style="display: none;"></iframe>
+	
+	<form action="https://smartcampus.inatel.br:4433/api/userapps/5dca9e86767120003b698e8f/devices/5dca9e99767120003b698e96/meas" id="myForm1" method="post" name="myForm1" target="hiddenFrame" enctype='application/json'>
 
-	<form action="https://smartcampus.inatel.br:4433/api/userapps/5d1ce33592f4e8001a91c54a/devices/5d431bb653b2d6003023e8bd/meas" id="myForm1" method="post" name="myForm1" target="hiddenFrame" enctype='application/json'>
-
-	  <input type="hidden" id="x-master-token" name="x-master-token" value="trLIkl2dSyLGPXM8r7FQSNsu">
-	  <input type="hidden" id="temp" name="temp" value=10>
-	  <button type="submit" class="btn btn-success" style="margin-left:auto;margin-right:auto;" onclick="getLocation()">ENVIAR somente Temperatura "10"</button>
+	  <input type="hidden" id="x-master-token" name="x-master-token" value="LiZRjdJJLxX4z51eOWwhWm6f">
+	  <input type="hidden" id="temp" name="lamp" value="on">
+	  <button type="submit" class="btn btn-success" style="margin-left:3em;margin-right:auto;" onclick="mudaLamp(1);">ON</button>
 
 	</form>
 	<br>
 
-	<form action="https://smartcampus.inatel.br:4433/api/userapps/5d1ce33592f4e8001a91c54a/devices/5d431bb653b2d6003023e8bd/meas" id="myForm2" method="post" name="myForm2" target="hiddenFrame" enctype='application/json'>
+	<form action="https://smartcampus.inatel.br:4433/api/userapps/5dca9e86767120003b698e8f/devices/5dca9e99767120003b698e96/meas" id="myForm2" method="post" name="myForm2" target="hiddenFrame" enctype='application/json'>
 
-	  <input type="hidden" id="x-master-token" name="x-master-token" value="trLIkl2dSyLGPXM8r7FQSNsu">
-	  <input type="hidden" id="temp" name="temp" value=20>
+	  <input type="hidden" id="x-master-token" name="x-master-token" value="LiZRjdJJLxX4z51eOWwhWm6f">
+	  <input type="hidden" id="temp" name="lamp" value="off">
+	  <button type="submit" class="btn btn-success" style="margin-left:3em;margin-right:auto;" onclick="mudaLamp(0);">OFF</button>
+	  <img id="lamp" src="lampada-apagada.jpg" alt="Lâmpada" height="auto" width="auto">
+	  
+	</form>
+	<br>
+	<h3 margin-left="30">Digite o valor de testes para a variável <u>temp</u> e pressione "ENVIAR"</h3>
+
+	<form action="https://smartcampus.inatel.br:4433/api/userapps/5dca9e86767120003b698e8f/devices/5dca9e99767120003b698e96/meas" id="myForm3" method="post" name="myForm3" target="hiddenFrame" enctype='application/json'>
+
+	  <input type="hidden" id="x-master-token" name="x-master-token" value="LiZRjdJJLxX4z51eOWwhWm6f">
+	  <input type="number" id="temp" name="temp" style="margin-left:4em;">
 	  <input type="hidden" id="latitude" name="latitude">
       <input type="hidden" id="longitude" name="longitude">
-	  <button type="submit" class="btn btn-success" style="margin-left:auto;margin-right:auto;" onclick="getLocation()">ENVIAR Temperatura "20" e Localização</button>
-	  
-	</form>
-	<br>
-
-	<form action="https://smartcampus.inatel.br:4433/api/userapps/5d1ce33592f4e8001a91c54a/devices/5d431bb653b2d6003023e8bd/meas" id="myForm3" method="post" name="myForm3" target="hiddenFrame" enctype='application/json'>
-
-	  <input type="hidden" id="x-master-token" name="x-master-token" value="trLIkl2dSyLGPXM8r7FQSNsu">
-	  <input type="number" id="temp" name="temp">
-	  <button type="submit" class="btn btn-success" style="margin-left:auto;margin-right:auto;" onclick="getLocation()" >ENVIAR VALOR "X"</button>
+	  <button type="submit" class="btn btn-success" style="margin-left:auto;margin-right:auto;" onclick="getLocation()" >ENVIAR</button>
 	  
 	</form>
 	<br>
 
 
-<button onclick="getMedidas()">Atualizar Tabela</button>
+
 <p id="tabela_medidas"></p>
 
 <br>
 
 <iframe name="GET_Frame"  ></iframe>
 	
-<form action="https://smartcampus.inatel.br:4433/api/userapps/5d1ce33592f4e8001a91c54a/devices/5d431bb653b2d6003023e8bd/meas" id="myForm5" method="get" name="myForm5" target="GET_Frame">
-  <input type="hidden" id="x-master-token" name="x-master-token" value="trLIkl2dSyLGPXM8r7FQSNsu">
+<form action="https://smartcampus.inatel.br:4433/api/userapps/5dca9e86767120003b698e8f/devices/5dca9e99767120003b698e96/meas" id="myForm5" method="get" name="myForm5" target="GET_Frame">
+  <input type="hidden" id="x-master-token" name="x-master-token" value="LiZRjdJJLxX4z51eOWwhWm6f">
   <button type="submit"  class="btn btn-danger" style="background-color:red;margin-left:auto;margin-right:auto;" >VER DADOS</button>
 </form>
 <br>
 
 <script>
+
+	var x = setInterval(function() {
+            getMedidas()
+        }, 1000);
 function getMedidas() {
 	var obj, dbParam, xmlhttp, myObj, x, txt = "";
 	obj = { table: "medidas" };
@@ -113,7 +128,7 @@ function getMedidas() {
 		document.getElementById("tabela_medidas").innerHTML = txt;
 	}
 	};
-	xmlhttp.open("GET", "https://smartcampus.inatel.br:4433/api/userapps/5d1ce33592f4e8001a91c54a/devices/5d431bb653b2d6003023e8bd/meas?x-master-token=trLIkl2dSyLGPXM8r7FQSNsu", true);
+	xmlhttp.open("GET", "https://smartcampus.inatel.br:4433/api/userapps/5dca9e86767120003b698e8f/devices/5dca9e99767120003b698e96/meas?x-master-token=LiZRjdJJLxX4z51eOWwhWm6f", true);
 	xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	xmlhttp.send("x=" + dbParam);
 }
@@ -138,6 +153,18 @@ function showPosition(position) {
   
 }
 getLocation();
+</script>
+
+<script>
+function mudaLamp(sw) {
+  var pic;
+  if (sw == 0) {
+    pic = "lampada-apagada.jpg"
+  } else {
+    pic = "lampada-acesa.jpg"
+  }
+  document.getElementById('lamp').src = pic;
+}
 </script>
 
 </body>
